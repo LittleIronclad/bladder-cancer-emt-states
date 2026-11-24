@@ -6,7 +6,7 @@
 
 A reproducible pipeline that resolves **discrete epithelial–mesenchymal transition (EMT) states** in bladder tumours from bulk RNA-seq, tests whether they carry **prognostic information**, and checks the findings in **four independent cohorts** and in **drug-sensitivity data from cell lines**.
 
-It is the computational part of my BSc thesis, *"The role of epithelial–mesenchymal transition in the development of chemoresistance in bladder cancer"* (HSE University, 2026). The wet-lab part of the thesis built cisplatin- and gemcitabine-resistant 5637 and RT112 sublines and profiled their EMT markers. [Step 7](#7-bridging-to-the-wet-lab) links the two parts.
+It is the computational part of my BSc thesis, *"The role of epithelial–mesenchymal transition in the development of chemoresistance in bladder cancer"* (HSE University, 2026).
 
 <p align="center"><img src="figures/02_umap_emt_states.png" width="85%"></p>
 
@@ -35,7 +35,6 @@ flowchart LR
     D --> G
     D --> H[GSEA<br/>Hallmark · KEGG · GO]
     B --> I[GDSC2 cell lines<br/>EMT score vs IC50]
-    D --> J[qPCR profiles of<br/>resistant sublines]
 ```
 
 | Step | Script | What it does |
@@ -47,7 +46,6 @@ flowchart LR
 | 4 | `04_external_validation.py` | Frozen risk score and nearest-centroid transfer of EMT states to GSE32894, GSE48075, GSE31684, GSE13507 |
 | 5 | `05_gsea.py` | GSEA prerank of each state vs the rest on the full Hallmark, KEGG 2021 and GO BP 2023 libraries |
 | 6 | `06_gdsc_drug_response.py` | EMT score of 40 bladder cell lines vs LN IC50 for 12 drugs (Spearman, BH-FDR) |
-| 7 | `07_cellline_similarity.py` | Cosine similarity of qPCR profiles of resistant sublines to the TCGA state profiles |
 
 ## Results
 
@@ -101,9 +99,6 @@ Each state is compared with all other tumours (Welch t-statistic ranking, 1,000 
 ### 6. Drug sensitivity of bladder cancer cell lines (GDSC2)
 The anchor-marker EMT score of 40 bladder cancer cell lines (Cell Model Passports RNA-seq) is correlated with LN IC50 for 12 drugs, with 16–18 lines per drug and BH correction across drugs. *Results for v2 will be added after the full run (the 1.3 GB Cell Model Passports archive is processed locally).*
 
-### 7. Bridging to the wet lab
-In the thesis, RT-qPCR log2 fold changes of seven EMT genes in four resistant sublines were compared with directional profiles of the TCGA states. Both RT112 sublines resembled the **Hybrid** state, and RT112-GemR showed a cadherin switch (CDH2 ↑ ~16× with CDH1 unchanged). The 5637 sublines shifted towards **Partial-E**. The script reproduces this comparison from a CSV of fold changes. The measurements themselves are unpublished laboratory data and are not included.
-
 ## Sensitivity and limitations
 
 - **Number of states.** Silhouette slightly prefers k = 4 (0.47 vs 0.44 at k = 5). At k = 4 the Hybrid tumours are split between Partial-E and Partial-M. The Hybrid state is therefore tied to the 5-state resolution, which is pre-specified to match the NMF rank.
@@ -126,7 +121,7 @@ git clone https://github.com/LittleIronclad/bladder-cancer-emt-states
 cd bladder-cancer-emt-states
 pip install -r requirements.txt
 python scripts/00_download_data.py      # automatic downloads + list of manual ones (data/README.md)
-./run_pipeline.sh                       # or run scripts/01_… to 07_… individually
+./run_pipeline.sh                       # or run scripts/01_… to 06_… individually
 ```
 
 Steps 1–4 take about 3 minutes on a laptop CPU. GSEA (step 5) needs internet access on its first run to fetch the gene-set libraries. Fixed seeds (42) make every stochastic step deterministic.

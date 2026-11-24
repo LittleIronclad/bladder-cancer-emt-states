@@ -27,5 +27,3 @@ data/
 | GDSC2 / Cell Model Passports | Iorio et al., *Cell* 2016; van der Meer et al., *NAR* 2019 | cell-line drug response |
 
 `expression_matrix.tsv` (the file name used by the 2026 version) is accepted in place of `TCGA-BLCA.star_tpm.tsv.gz`.
-
-`cellline_qpcr_log2fc.csv` (step 7) holds unpublished laboratory measurements and is not distributed.
