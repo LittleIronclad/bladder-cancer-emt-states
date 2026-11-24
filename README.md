@@ -18,6 +18,7 @@ It is the computational part of my BSc thesis, *"The role of epithelial–mesenc
 | **Prognosis** | Overall survival differs between states (log-rank p = 0.007). The median is **7.2 years for epithelial-like tumours vs 2.4 years for Hybrid** (BH-adjusted p = 0.023). Hybrid and mesenchymal-like tumours are not distinguishable overall (p = 0.88). |
 | **Late mortality** | Among patients alive at 2 years, Hybrid tumours have higher mortality than mesenchymal-like ones: **HR 4.05 (95% CI 1.77–9.30)**, p < 0.001. This is exploratory, with only 27 Hybrid patients. |
 | **Risk model** | A 42-gene LASSO Cox model selects 17 genes. **Nested-CV C-index 0.607 ± 0.048**; the apparent C-index of 0.674 is optimistic. The cross-fitted risk score stays independent of age and stage: **HR 1.31 per SD (1.12–1.53)**, p < 0.001. |
+| **Biology** | GSEA on the full transcriptome shows **"invasion without proliferation"** in the Hybrid state. EMT, angiogenesis and ECM programmes are up, while MYC, E2F and G2/M targets and ribosome biogenesis are among the most depleted gene sets in any state. Partial-M and Mesenchymal tumours, in contrast, are highly proliferative. |
 | **External validation** | With frozen TCGA coefficients, C-index is **0.591 in a pooled meta-cohort of 331 patients** and 0.53–0.76 in individual cohorts. Transferred EMT states separate survival in 3 of 4 cohorts (meta-cohort p = 0.002). Hybrid tumours do worse than epithelial-like ones in GSE32894, GSE13507 and the meta-cohort. |
 
 The internal nested-CV estimate (0.61) and the external meta-cohort estimate (0.59) agree. The panel carries a **modest but reproducible** prognostic signal, and the reported numbers are what an independent dataset should be expected to give.
@@ -94,17 +95,35 @@ Every gene is z-scored within its cohort, and the TCGA coefficients are applied 
 <p align="center"><img src="figures/04_km_meta_geo.png" width="95%"></p>
 
 ### 5. Pathways (GSEA)
-Each state is compared with all other tumours (Welch t-statistic ranking, 1,000 permutations) on the complete Hallmark, KEGG 2021 and GO Biological Process 2023 libraries. *Results for v2 will be added after the full run (the gene-set libraries are downloaded on first use).*
+<p align="center"><img src="figures/05_hallmark_nes_heatmap.png" width="70%"></p>
+
+Each state is compared with all other tumours (Welch t-statistic ranking, 1,000 permutations) on the complete Hallmark (50), KEGG 2021 (320) and GO Biological Process 2023 (5,406) libraries.
+
+| Hallmark (NES) | Epithelial | Partial-E | **Hybrid** | Partial-M | Mesenchymal |
+|---|---:|---:|---:|---:|---:|
+| Epithelial–mesenchymal transition | −2.14 | −2.33 | **+2.07** | +1.85 | +2.60 |
+| Angiogenesis | −1.58 | −1.72 | **+1.73** | +1.41 | +1.76 |
+| MYC targets V1 | −1.50 | −0.79 | **−2.97** | +2.67 | +1.62 |
+| E2F targets | −1.97 | +0.79 | **−2.86** | +2.80 | +1.84 |
+| G2/M checkpoint | −1.89 | −0.79 | **−2.47** | +2.82 | +1.80 |
+
+All Hybrid values have FDR < 0.001. The Hybrid state is the only one that combines an active EMT/ECM programme with strongly *suppressed* proliferation, and the same split is seen in KEGG (Ribosome, Spliceosome ↓) and GO BP (ribosome biogenesis ↓, ECM organisation ↑). A slow-cycling, invasive phenotype would be consistent with late rather than early mortality, though this remains a hypothesis. Immune and stromal sets (allograft rejection, B-cell receptor signalling, myogenesis) are also up in Hybrid tumours, so part of the signal probably comes from the tumour microenvironment ([Hybrid top pathways](figures/05_hybrid_top_pathways.png), [all results](results/gsea_significant.csv)).
 
 ### 6. Drug sensitivity of bladder cancer cell lines (GDSC2)
-The anchor-marker EMT score of 40 bladder cancer cell lines (Cell Model Passports RNA-seq) is correlated with LN IC50 for 12 drugs, with 16–18 lines per drug and BH correction across drugs. *Results for v2 will be added after the full run (the 1.3 GB Cell Model Passports archive is processed locally).*
+<p align="center"><img src="figures/06_gdsc_correlations.png" width="70%"></p>
+
+The anchor-marker EMT score of 40 bladder cancer cell lines (Cell Model Passports RNA-seq) is correlated with LN IC50 for 10 drugs with GDSC2 data, using 16–18 lines per drug and BH correction across drugs. The score orders the lines as expected: RT4, SW780 and RT-112 are the most epithelial; T24, J82, UM-UC-3 and TCCSUP are among the most mesenchymal ([scores](results/gdsc_cell_line_emt_scores.csv)).
+
+- **No association with the standard chemotherapy drugs** (cisplatin ρ = −0.14, gemcitabine ρ = 0.28; both p > 0.25).
+- The strongest trend is **resistance of mesenchymal lines to the MEK inhibitor trametinib** (ρ = 0.56, p = 0.016), with weaker trends for the EGFR inhibitors erlotinib and gefitinib (ρ ≈ 0.45–0.47). **None survives FDR correction** (trametinib FDR = 0.16). With 18 lines this is a hypothesis to test, not a finding.
 
 ## Sensitivity and limitations
 
 - **Number of states.** Silhouette slightly prefers k = 4 (0.47 vs 0.44 at k = 5). At k = 4 the Hybrid tumours are split between Partial-E and Partial-M. The Hybrid state is therefore tied to the 5-state resolution, which is pre-specified to match the NMF rank.
 - **Hybrid vs mesenchymal.** Hybrid tumours do worse than epithelial-like ones in TCGA and in three external datasets. They are **not** distinguishable from mesenchymal-like tumours overall. The late-mortality signal comes from a post-hoc landmark analysis of 27 patients and needs independent confirmation.
 - **Heterogeneous validation data.** Different platforms, endpoints (OS vs disease-specific death) and case mixes (GSE13507 includes non-muscle-invasive tumours). Within-cohort z-scoring removes location and scale differences, but not every batch effect.
-- **Bulk RNA-seq** averages tumour, stromal and immune cells. Part of the "mesenchymal" signal is stromal content, so a single-cell or deconvolution analysis is the natural next step.
+- **Bulk RNA-seq** averages tumour, stromal and immune cells. Part of the "mesenchymal" and Hybrid signal is stromal and immune content (see GSEA), so a single-cell or deconvolution analysis is the natural next step.
+- **Cell-line drug response** rests on 16–18 lines per drug, and no association survives multiple-testing correction.
 - **Associations, not causation.** TCGA is a retrospective cohort with heterogeneous treatment.
 
 ## Version history
@@ -124,7 +143,7 @@ python scripts/00_download_data.py      # automatic downloads + list of manual o
 ./run_pipeline.sh                       # or run scripts/01_… to 06_… individually
 ```
 
-Steps 1–4 take about 3 minutes on a laptop CPU. GSEA (step 5) needs internet access on its first run to fetch the gene-set libraries. Fixed seeds (42) make every stochastic step deterministic.
+Steps 1–4 take about 2 minutes on a laptop CPU; GSEA (step 5) takes a few minutes more and needs internet access on its first run to fetch the gene-set libraries. Results are identical on Linux and macOS (Apple M4). Fixed seeds (42) make every stochastic step deterministic.
 
 ```
 emt/            config (paths, gene panel, parameters) and reusable code: data loading, scoring, survival
