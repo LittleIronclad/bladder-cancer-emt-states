@@ -8,6 +8,7 @@ statsmodels>=0.14
 umap-learn>=0.5.4
 gseapy>=1.1
 GEOparse>=2.0.3
+six              # imported by GEOparse but not declared as its dependency
 openpyxl>=3.1
 matplotlib>=3.7
 seaborn>=0.13
