@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Software for NMF clustering of hybrid epithelial–mesenchymal states and LASSO Cox survival prediction in bladder cancer"
+type: software
+authors:
+  - family-names: Potemkin
+    given-names: Alexey Nikolaevich
+    affiliation: "HSE University; University of Tübingen"
+version: 2.0.0
+date-released: 2026-11-25
+license: MIT
+repository-code: "https://github.com/LittleIronclad/bladder-cancer-emt-states"
+identifiers:
+  - type: other
+    value: "Rospatent Certificate of State Registration of a Computer Program No. 2026691679 (14 October 2026)"
+    description: "Registration of the original (v1.0) version"
+keywords: [bladder cancer, epithelial-mesenchymal transition, NMF, LASSO Cox, survival analysis, TCGA, bioinformatics]

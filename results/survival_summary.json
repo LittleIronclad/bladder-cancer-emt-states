@@ -1,0 +1,37 @@
+{
+  "n": 400,
+  "events": 175,
+  "logrank_p_5_states": 0.006892135828542655,
+  "logrank_p_3_groups": 0.012720099089790063,
+  "logrank_p_landmark_2y": 0.00027456929513240143,
+  "landmark_n": 137,
+  "landmark_events": 36,
+  "landmark_hr_hybrid_vs_pm_m": [
+    4.05,
+    1.77,
+    9.3,
+    0.0009461201584777105
+  ],
+  "median_os_years": {
+    "Epithelial + Partial-E": 7.23,
+    "Hybrid": 2.35,
+    "Partial-M + Mesenchymal": 1.97
+  },
+  "lasso_alpha": 0.02359833466782194,
+  "lasso_n_genes": 17,
+  "c_index_apparent": 0.674,
+  "c_index_apparent_bootstrap_ci": [
+    0.629,
+    0.715
+  ],
+  "c_index_nested_cv_mean": 0.607,
+  "c_index_nested_cv_sd": 0.048,
+  "c_index_out_of_fold": 0.591,
+  "risk_groups_logrank_p_oof": 0.027142696850862312,
+  "multivariable_hr_risk_per_sd": 1.31,
+  "multivariable_hr_ci": [
+    1.12,
+    1.53
+  ],
+  "multivariable_p": 0.0008323029256720141
+}

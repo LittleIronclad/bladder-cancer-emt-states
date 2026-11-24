@@ -1,0 +1,43 @@
+{
+  "n_tumours": 400,
+  "n_hvg": 3000,
+  "nmf_rank": 5,
+  "k": 5,
+  "silhouette": {
+    "4": 0.471,
+    "5": 0.435,
+    "6": 0.367,
+    "7": 0.308,
+    "8": 0.405
+  },
+  "emt_score_range": {
+    "4": 0.317,
+    "5": 0.376,
+    "6": 0.39,
+    "7": 0.424,
+    "8": 0.469
+  },
+  "mean_within_state_consensus": {
+    "Epithelial": 0.944,
+    "Partial-E": 0.788,
+    "Hybrid": 0.828,
+    "Partial-M": 0.956,
+    "Mesenchymal": 0.822
+  },
+  "state_sizes": {
+    "Epithelial": 78,
+    "Partial-E": 105,
+    "Hybrid": 69,
+    "Partial-M": 94,
+    "Mesenchymal": 54
+  },
+  "state_anchor_profile": {
+    "Epithelial": -0.894,
+    "Partial-E": -0.881,
+    "Hybrid": 0.293,
+    "Partial-M": 0.439,
+    "Mesenchymal": 1.866
+  },
+  "kruskal_p_emt_score": 5.95544231842798e-48,
+  "spearman_rho_state_vs_score": 0.711
+}
